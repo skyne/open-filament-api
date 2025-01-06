@@ -1,6 +1,6 @@
 import { Filament } from "../../../services/filament.service.interface";
+import { IMapper } from "../../generic/mapper.interface";
 import { RepositoryFilament } from "../repository.model";
-import { IMapper } from "../../common/mapper.interface";
 import { Service } from "typedi";
 
 @Service()

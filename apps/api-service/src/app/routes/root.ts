@@ -1,11 +1,11 @@
 import { FastifyInstance } from 'fastify';
 import { Service } from 'typedi';
-import { ROUTESERVICE_TOKEN } from './constants';
+import { IRouterService } from './routerService.interface';
 
-@Service({ id: ROUTESERVICE_TOKEN, multiple: true, transient: false })
-export class RootRouterService {
-  registerRoutes(fastify: FastifyInstance, basePath: string) {
-    fastify.get(basePath, async function () {
+@Service()
+export class RootRouterService implements IRouterService {
+  registerRoutes(app: FastifyInstance, basePath: string) {
+    app.get(basePath, async function () {
       return { message: 'Hello API' };
     });
   }

@@ -1,50 +1,46 @@
-import * as path from 'path';
-import { FastifyInstance } from 'fastify';
-import AutoLoad from '@fastify/autoload';
+import Fastify, { FastifyInstance } from 'fastify';
 import Container from 'typedi';
-import { ROUTESERVICE_TOKEN } from './routes/constants';
-import { MongooseHandler, TestDbHandler } from '../mongo';
+import { IDbHandler, MongooseHandler, TestDbHandler } from '../mongo';
 import { app as appConfig } from '../config';
-import fs from 'fs';
-import 'reflect-metadata';
+import { Service } from 'typedi';
+import { RootRouterService } from './routes/root';
+import { FilamentRouterService } from './routes/filament';
 
-/* eslint-disable-next-line */
-export interface AppOptions {}
+@Service()
+export class App {
+  public app: FastifyInstance;
 
-export async function app(fastify: FastifyInstance, opts: AppOptions) {
+  constructor(
+    private readonly dbHandler: IDbHandler = undefined,
+    private readonly rootRouterService: RootRouterService = Container.get(RootRouterService),
+    private readonly filamentRouterService: FilamentRouterService = Container.get(FilamentRouterService),
 
-  console.log('Starting app', appConfig.env);
-  const dbHandler = appConfig.env === 'test' ? Container.get(TestDbHandler) : Container.get(MongooseHandler);
-  dbHandler.connect();
+   ) {
 
+      if(appConfig.env === 'test') {
+        this.dbHandler = Container.get(TestDbHandler);
+      }
+      else {
+        this.dbHandler = Container.get(MongooseHandler);
+      }
 
-  const routeFiles = path.join(__dirname, 'routes');
-  for(const file of fs.readdirSync(routeFiles)) {
-    console.log('Loading route', file);
-    if(file.endsWith('.ts') || file.endsWith('.js')) {
-      require(path.join(routeFiles, file));
+      this.app = Fastify({
+        logger: true,
+      });
+
+      this.configure();
+      this.routes();
+
+      this.app.printRoutes();
     }
-  }
 
-  // This loads all classes that have been decorated with @Service(ROUTESERVICE_TOKEN)
-  Container.getMany(ROUTESERVICE_TOKEN).forEach((route: any) => {
-    console.log('Registering route', route.constructor.name);
-    route.registerRoutes(fastify, '/api');
-  });
+    configure() {
+      this.dbHandler.connect();
+    }
 
-
-  // This loads all plugins defined in plugins
-  // those should be support plugins that are reused
-  // through your application
-  fastify.register(AutoLoad, {
-    dir: path.join(__dirname, 'plugins'),
-    options: { ...opts },
-  });
-
-  if(appConfig.env === 'test') {
-    fastify.printRoutes({
-      commonPrefix: true,
-      includeMeta: true,
-    })
-  }
+    routes() {
+      const basePath = '/api';
+      this.rootRouterService.registerRoutes(this.app, basePath);
+      this.filamentRouterService.registerRoutes(this.app, basePath);
+    }
 }

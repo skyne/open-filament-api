@@ -19,8 +19,13 @@ mongoose.connection.on('disconnected', () => {
 });
 
 
+export interface IDbHandler {
+  connect(): Promise<void>;
+  disconnect(): Promise<void>;
+}
+
 @Service()
-export class MongooseHandler {
+export class MongooseHandler implements IDbHandler {
   async connect() {
     if(appConfig.env !== 'test') {
       await mongoose.connect(uri, {
@@ -39,7 +44,7 @@ export class MongooseHandler {
 
 
 @Service()
-export class TestDbHandler {
+export class TestDbHandler implements IDbHandler {
   private mongod?: MongoMemoryServer;
 
   async connect() {
