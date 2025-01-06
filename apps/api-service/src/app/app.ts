@@ -6,6 +6,7 @@ import { ROUTESERVICE_TOKEN } from './routes/constants';
 import { MongooseHandler, TestDbHandler } from '../mongo';
 import { app as appConfig } from '../config';
 import fs from 'fs';
+import 'reflect-metadata';
 
 /* eslint-disable-next-line */
 export interface AppOptions {}

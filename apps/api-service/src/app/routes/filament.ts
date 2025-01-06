@@ -8,7 +8,10 @@ import { FilamentService } from "../services/filament.service";
 @Service({ id: ROUTESERVICE_TOKEN, multiple: true, transient: false })
 export class FilamentRouterService {
 
-  constructor(readonly filamentService: IFilamentService = Container.get(FilamentService)) {
+  constructor(private filamentService: IFilamentService = undefined) {
+    if (!filamentService) {
+      this.filamentService = Container.get(FilamentService);
+    }
   }
 
   registerRoutes(app: FastifyInstance, basePath: string) {
