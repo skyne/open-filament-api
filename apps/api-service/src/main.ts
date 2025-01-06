@@ -1,8 +1,7 @@
 import Fastify from 'fastify';
 import { app } from './app/app';
-
-const host = process.env.HOST ?? 'localhost';
-const port = process.env.PORT ? Number(process.env.PORT) : 3000;
+import 'reflect-metadata';
+import { app as appConfig } from './config';
 
 // Instantiate Fastify with some config
 const server = Fastify({
@@ -13,11 +12,11 @@ const server = Fastify({
 server.register(app);
 
 // Start listening.
-server.listen({ port, host }, (err) => {
+server.listen({ port: appConfig.port, host: '0.0.0.0' }, (err) => {
   if (err) {
     server.log.error(err);
     process.exit(1);
   } else {
-    console.log(`[ ready ] http://${host}:${port}`);
+    console.log(`[ ready ] http://0.0.0.0:${appConfig.port}`);
   }
 });

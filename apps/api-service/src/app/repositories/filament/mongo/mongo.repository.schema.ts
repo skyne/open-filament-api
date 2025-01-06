@@ -1,5 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
-import { RepositoryFilament } from './repository.model';
+import { RepositoryFilament } from '../repository.model';
 
 const FilamentSchema = new Schema<RepositoryFilament>({
   //id: { type: String, required: true },
