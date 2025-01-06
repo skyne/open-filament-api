@@ -1,7 +1,12 @@
 import { FastifyInstance } from 'fastify';
+import { Service } from 'typedi';
 
-export default async function (fastify: FastifyInstance) {
-  fastify.get('/', async function () {
-    return { message: 'Hello API' };
-  });
+@Service('route')
+export class RootService {
+  registerRoutes(fastify: FastifyInstance, basePath: string) {
+    fastify.get(basePath, async function () {
+      return { message: 'Hello API' };
+    });
+  }
 }
+
