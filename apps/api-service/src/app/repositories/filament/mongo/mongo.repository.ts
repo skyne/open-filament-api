@@ -16,6 +16,6 @@ export class MongoFilamentRepository implements FilamentRepository {
       throw new Error("Filament not found");
     }
 
-    return this.mapper.mapFrom(filament);
+    return this.mapper.mapTo(filament);
   }
 }
