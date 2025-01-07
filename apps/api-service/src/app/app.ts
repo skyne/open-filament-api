@@ -4,7 +4,7 @@ import { IDbHandler, MongooseHandler, TestDbHandler } from '../mongo';
 import { app as appConfig } from '../config';
 import { Service } from 'typedi';
 import { RootRouterService } from './routes/root';
-import { FilamentRouterService } from './routes/filament';
+import { FilamentRouterService } from './routes/filamen.router';
 
 @Service()
 export class App {
