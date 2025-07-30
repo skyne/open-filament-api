@@ -5,17 +5,6 @@
   "devCommand": "nx serve frontend-web", 
   "installCommand": "npm install",
   "framework": "nextjs",
-  "functions": {
-    "apps/api-service/src/vercel.ts": {
-      "runtime": "@vercel/node"
-    }
-  },
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/apps/api-service/src/vercel.ts"
-    }
-  ],
   "env": {
     "NODE_ENV": "production"
   }
