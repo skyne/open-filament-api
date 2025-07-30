@@ -62,3 +62,6 @@ export class App {
       this.app.register(manufacturerRoutes, { prefix: basePath });
     }
 }
+
+// Export an instance for deployment
+export const app = Container.get(App).app;
