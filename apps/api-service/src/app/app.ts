@@ -43,11 +43,20 @@ export class App {
         allowedHeaders: ['Content-Type', 'Authorization'],
       });
 
-      this.dbHandler.connect();
+      // Only connect to DB if not in Vercel serverless environment initially
+      if (process.env.MONGODB_URI || appConfig.env !== 'production') {
+        this.dbHandler.connect();
+      }
     }
 
     routes() {
       const basePath = '/api';
+      
+      // Health check route
+      this.app.get(basePath + '/health', async () => {
+        return { status: 'ok', timestamp: new Date().toISOString() };
+      });
+
       this.app.register(filamentRoutes, { prefix: basePath });
       this.app.register(materialRoutes, { prefix: basePath });
       this.app.register(manufacturerRoutes, { prefix: basePath });
