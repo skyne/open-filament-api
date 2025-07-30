@@ -44,8 +44,24 @@ export type CreateFilamentParams = Omit<ApiFilament, 'id'>;
 export type CreateMaterialParams = Omit<ApiMaterial, 'id'>;
 export type CreateManufacturerParams = Omit<ApiManufacturer, 'id'>;
 
-// API Configuration
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+// API Configuration - dynamically determine API URL based on environment
+const getApiBaseUrl = () => {
+  // For production, use environment variable if set
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL;
+  }
+  
+  // For production on Vercel (when no env var is set), use relative path
+  if (process.env.NODE_ENV === 'production') {
+    // In production, assume API is on same domain
+    return typeof window !== 'undefined' ? window.location.origin : '';
+  }
+  
+  // Development fallback
+  return 'http://localhost:3000';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 const API_BASE_PATH = '/api';
 
 // Create axios instance with base configuration
