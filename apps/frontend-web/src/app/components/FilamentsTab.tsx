@@ -48,7 +48,11 @@ export default function FilamentsTab() {
     e.preventDefault();
     try {
       if (editingFilament) {
-        await filamentApi.updateFilament(editingFilament.id!, formData);
+        if (!editingFilament.id) {
+          console.error('Cannot update filament without ID');
+          return;
+        }
+        await filamentApi.updateFilament(editingFilament.id, formData);
       } else {
         await filamentApi.createFilament(formData);
       }

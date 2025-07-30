@@ -44,7 +44,11 @@ export default function MaterialsTab() {
     e.preventDefault();
     try {
       if (editingMaterial) {
-        await materialApi.updateMaterial(editingMaterial.id!, formData);
+        if (!editingMaterial.id) {
+          console.error('Cannot update material without ID');
+          return;
+        }
+        await materialApi.updateMaterial(editingMaterial.id, formData);
       } else {
         await materialApi.createMaterial(formData);
       }
@@ -465,8 +469,9 @@ export default function MaterialsTab() {
                         Edit
                       </button>
                       <button
-                        onClick={() => handleDelete(material.id!)}
+                        onClick={() => material.id && handleDelete(material.id)}
                         className="text-red-600 hover:text-red-900 transition-colors"
+                        disabled={!material.id}
                       >
                         Delete
                       </button>
