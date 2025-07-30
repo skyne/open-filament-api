@@ -1,0 +1,37 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "packageManager": "npm",
+  "reporters": ["clear-text", "progress"],
+  "checkers": ["typescript"],
+  "tsconfigFile": "tsconfig.json",
+  "thresholds": {
+    "break": 100
+  },
+  "timeoutMS": 5000,
+  "testRunner": "jest",
+  "coverageAnalysis": "perTest",
+  "ignorePatterns": [],
+  "ignoreStatic": true,
+  "mutate": [
+    "src/**/*.ts",
+    "!src/test-integration/*",
+    "!src/**/*.spec.ts",
+    "!src/**/*.fake.ts",
+    "!src/**/*.interface.ts",
+    "!src/**/*.generated.ts",
+    "!src/migration/**/*",
+    "!src/**/*.schema.ts",
+    "!src/**/*.router.ts",
+    "!src/**/router.ts",
+    "!src/graphql/*",
+    "!src/**/graphql.module.ts",
+    "!src/**/*schema.generator.ts",
+    "!src/**/*.json",
+    "!src/unleash.ts",
+    "!src/**/helpers.ts",
+    "!src/**/*.helpers.ts",
+    "!src/schema.validator.ts",
+    "!src/**/*schema.generator.runner.ts",
+    "!src/**/generated/**/*"
+  ]
+}

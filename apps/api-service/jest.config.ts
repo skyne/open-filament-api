@@ -1,3 +1,4 @@
+
 export default {
   displayName: 'api-service',
   preset: '../../jest.preset.js',
@@ -7,4 +8,5 @@ export default {
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../coverage/apps/api-service',
+  modulePathIgnorePatterns: ['.*.stryker-tmp/.*'],
 };

@@ -6,6 +6,89 @@
 
 [Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/node?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
 
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js (v18+)
+- Docker and Docker Compose
+- npm
+
+### Start the Full Stack Application
+
+```sh
+# Start everything (MongoDB + API + Frontend)
+npm start
+
+# Or step by step:
+npm run docker:up     # Start MongoDB container
+npm run dev          # Start both API and Frontend services
+```
+
+This will start:
+- **MongoDB**: Running on `localhost:27017` (with authentication)
+- **API Service**: Running on `localhost:3000`
+- **Frontend**: Running on `localhost:4200`
+
+### Individual Services
+
+```sh
+# Start just the API service
+npx nx serve api-service
+
+# Start just the frontend
+npx nx serve frontend-web
+
+# Build both projects
+npm run build
+```
+
+### Docker Commands
+
+```sh
+# Start MongoDB container
+npm run docker:up
+
+# Stop and remove containers
+npm run docker:down
+
+# View MongoDB logs
+npm run docker:logs
+
+# Reset MongoDB data (removes all data!)
+npm run docker:reset
+```
+
+## Environment Configuration
+
+Copy `.env.example` to `.env` and configure the following variables:
+
+### CORS Configuration
+The API supports configurable CORS origins for cross-origin requests:
+- `CORS_ORIGINS`: Comma-separated list of allowed origins (default: `http://localhost:4200`)
+- Example: `CORS_ORIGINS=http://localhost:4200,http://localhost:3000,https://yourdomain.com`
+
+### MongoDB Configuration
+- `MONGO_URI`: Full MongoDB connection string with authentication
+- `MONGO_HOST`: MongoDB host (default: localhost)
+- `MONGO_PORT`: MongoDB port (default: 27017)
+- `MONGO_DB`: Database name (default: filament_db)
+- `MONGO_USER`: Database user (default: filament_user)
+- `MONGO_PASSWORD`: Database password (default: filament_password)
+
+### Other Configuration
+- `NODE_ENV`: Environment (development/production)
+- `PORT`: Server port (default: 3000)
+
+## Architecture
+
+The project consists of:
+
+- **API Service** (`apps/api-service`): Fastify-based REST API with MongoDB
+- **Frontend Web** (`apps/frontend-web`): Next.js application consuming the API
+- **Database**: MongoDB running in Docker with authentication
+
+The frontend depends on the API service, ensuring proper build and deployment order.
+
 ## Run tasks
 
 To run the dev server for your app, use:

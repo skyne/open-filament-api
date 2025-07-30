@@ -3,8 +3,10 @@ import Container from 'typedi';
 import { IDbHandler, MongooseHandler, TestDbHandler } from '../mongo';
 import { app as appConfig } from '../config';
 import { Service } from 'typedi';
-import { RootRouterService } from './routes/root';
-import { FilamentRouterService } from './routes/filamen.router';
+import { filamentRoutes } from './routes/filament.router';
+import { materialRoutes } from './routes/material.router';
+import { manufacturerRoutes } from './routes/manufacturer.router';
+import cors from '@fastify/cors';
 
 @Service()
 export class App {
@@ -12,8 +14,6 @@ export class App {
 
   constructor(
     private readonly dbHandler: IDbHandler = undefined,
-    private readonly rootRouterService: RootRouterService = Container.get(RootRouterService),
-    private readonly filamentRouterService: FilamentRouterService = Container.get(FilamentRouterService),
 
    ) {
 
@@ -35,12 +35,21 @@ export class App {
     }
 
     configure() {
+      // Register CORS plugin
+      this.app.register(cors, {
+        origin: appConfig.corsOrigins,
+        credentials: true,
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization'],
+      });
+
       this.dbHandler.connect();
     }
 
     routes() {
       const basePath = '/api';
-      this.rootRouterService.registerRoutes(this.app, basePath);
-      this.filamentRouterService.registerRoutes(this.app, basePath);
+      this.app.register(filamentRoutes, { prefix: basePath });
+      this.app.register(materialRoutes, { prefix: basePath });
+      this.app.register(manufacturerRoutes, { prefix: basePath });
     }
 }

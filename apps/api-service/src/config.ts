@@ -6,6 +6,9 @@ dotenv.config();
 export const app = {
   env: process.env.NODE_ENV || 'production',
   port: (process.env.PORT || 3000) as number,
+  // CORS origins - comma-separated list of allowed origins
+  // Example: "http://localhost:4200,http://localhost:3000,https://yourdomain.com"
+  corsOrigins: process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(',').map(url => url.trim()) : ['http://localhost:4200'],
 }
 
 

@@ -1,0 +1,48 @@
+{
+  "name": "open-filament-api",
+  "$schema": "./node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "targets": {
+    "start:dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "docker compose up -d mongodb",
+          "sleep 5",
+          "npx concurrently \"nx serve api-service\" \"nx serve frontend-web\""
+        ],
+        "parallel": false
+      }
+    },
+    "start:services": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "nx serve api-service",
+          "nx serve frontend-web"
+        ],
+        "parallel": true
+      },
+      "dependsOn": ["docker:up"]
+    },
+    "docker:up": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose up -d mongodb && sleep 5"
+      }
+    },
+    "docker:down": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose down"
+      }
+    },
+    "build:all": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["api-service:build", "frontend-web:build"],
+      "options": {
+        "command": "echo 'All projects built successfully'"
+      }
+    }
+  }
+}
