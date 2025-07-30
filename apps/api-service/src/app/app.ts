@@ -43,10 +43,10 @@ export class App {
         allowedHeaders: ['Content-Type', 'Authorization'],
       });
 
-      // Only connect to DB if not in Vercel serverless environment initially
-      if (process.env.MONGODB_URI || appConfig.env !== 'production') {
-        this.dbHandler.connect();
-      }
+      // Connect to database
+      this.dbHandler.connect().catch(err => {
+        console.error('Failed to connect to database:', err);
+      });
     }
 
     routes() {
@@ -55,6 +55,22 @@ export class App {
       // Health check route
       this.app.get(basePath + '/health', async () => {
         return { status: 'ok', timestamp: new Date().toISOString() };
+      });
+
+      // MongoDB connection debug route
+      this.app.get(basePath + '/debug/db', async () => {
+        const mongoose = require('mongoose');
+        return { 
+          status: 'ok',
+          mongodb: {
+            readyState: mongoose.connection.readyState,
+            readyStateText: ['disconnected', 'connected', 'connecting', 'disconnecting'][mongoose.connection.readyState],
+            host: mongoose.connection.host || 'unknown',
+            name: mongoose.connection.name || 'unknown',
+            uri: process.env.MONGO_URI ? process.env.MONGO_URI.replace(/\/\/[^:]+:[^@]+@/, '//***:***@') : 'not set'
+          },
+          timestamp: new Date().toISOString() 
+        };
       });
 
       this.app.register(filamentRoutes, { prefix: basePath });

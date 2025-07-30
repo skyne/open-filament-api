@@ -5,7 +5,8 @@
   "main": "main.js",
   "scripts": {
     "start": "node main.js",
-    "build": "echo 'Build completed by Nx'"
+    "build": "echo 'Build completed by Nx'",
+    "dev": "node main.js"
   },
   "engines": {
     "node": ">=18.0.0"

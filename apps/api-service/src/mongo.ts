@@ -28,8 +28,21 @@ export interface IDbHandler {
 export class MongooseHandler implements IDbHandler {
   async connect() {
     if(appConfig.env !== 'test') {
+      console.log('Connecting to MongoDB with URI:', uri.replace(/\/\/[^:]+:[^@]+@/, '//***:***@'));
+      
+      // Configure mongoose for better Atlas connectivity
+      mongoose.set('strictQuery', false);
+      
       await mongoose.connect(uri, {
-
+        serverSelectionTimeoutMS: 30000, // 30 seconds
+        socketTimeoutMS: 45000, // 45 seconds
+        maxPoolSize: 10, // Maintain up to 10 socket connections
+        minPoolSize: 1, // Maintain at least 1 socket connection
+        maxIdleTimeMS: 30000, // Close connections after 30 seconds of inactivity
+        connectTimeoutMS: 30000, // 30 seconds connection timeout
+        heartbeatFrequencyMS: 10000, // Send heartbeat every 10 seconds
+        retryWrites: true, // Enable retryable writes
+        retryReads: true, // Enable retryable reads
       });
     }
   };

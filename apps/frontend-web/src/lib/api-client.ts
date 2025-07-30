@@ -48,21 +48,31 @@ export type CreateManufacturerParams = Omit<ApiManufacturer, 'id'>;
 const getApiBaseUrl = () => {
   // For production, use environment variable if set
   if (process.env.NEXT_PUBLIC_API_URL) {
-    return process.env.NEXT_PUBLIC_API_URL;
+    const url = process.env.NEXT_PUBLIC_API_URL.trim(); // Remove any whitespace/newlines
+    console.log('Using API URL from environment:', url);
+    return url;
   }
   
-  // For production on Vercel (when no env var is set), use relative path
+  // For production, use the deployed Fastify backend on Fly.io
   if (process.env.NODE_ENV === 'production') {
-    // In production, assume API is on same domain
-    return typeof window !== 'undefined' ? window.location.origin : '';
+    console.log('Using production API URL:', 'https://open-filament-api.fly.dev');
+    return 'https://open-filament-api.fly.dev';
   }
   
-  // Development fallback
+  // Development fallback to local Fastify server
+  console.log('Using development API URL:', 'http://localhost:3000');
   return 'http://localhost:3000';
 };
 
 const API_BASE_URL = getApiBaseUrl();
 const API_BASE_PATH = '/api';
+
+console.log('API Configuration:', {
+  NODE_ENV: process.env.NODE_ENV,
+  NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+  API_BASE_URL,
+  FULL_API_URL: `${API_BASE_URL}${API_BASE_PATH}`
+});
 
 // Create axios instance with base configuration
 const apiClient = axios.create({
