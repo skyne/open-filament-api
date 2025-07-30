@@ -5,7 +5,19 @@
   "devCommand": "nx serve frontend-web", 
   "installCommand": "npm install",
   "framework": "nextjs",
+  "functions": {
+    "apps/api-service/src/vercel.ts": {
+      "runtime": "@vercel/node"
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/apps/api-service/src/vercel.ts"
+    }
+  ],
   "env": {
-    "NEXT_PUBLIC_API_URL": "https://your-api-domain.vercel.app"
+    "NODE_ENV": "production",
+    "MONGODB_URI": "@mongodb_uri"
   }
 }
