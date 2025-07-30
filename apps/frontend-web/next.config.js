@@ -12,9 +12,8 @@ const nextConfig = {
     // See: https://github.com/gregberge/svgr
     svgr: false,
   },
-  // Remove standalone output for Vercel deployment
-  // output: 'standalone',
-  distDir: '../../dist/apps/frontend-web',
+  // Remove custom distDir for Vercel deployment
+  // distDir: '../../dist/apps/frontend-web',
   trailingSlash: false,
   images: {
     unoptimized: true

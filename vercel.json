@@ -1,8 +1,7 @@
 {
   "version": 2,
-  "name": "open-filament-frontend",
   "buildCommand": "npm run build:frontend",
-  "outputDirectory": "dist/apps/frontend-web",
+  "outputDirectory": "apps/frontend-web/.next",
   "devCommand": "nx serve frontend-web",
   "installCommand": "npm install",
   "framework": "nextjs",
