@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "buildCommand": "npm run build:frontend",
+  "buildCommand": "cd apps/frontend-web && npx next build",
   "outputDirectory": "apps/frontend-web/.next",
-  "devCommand": "nx serve frontend-web",
+  "devCommand": "nx serve frontend-web", 
   "installCommand": "npm install",
   "framework": "nextjs",
   "env": {
