@@ -46,3 +46,4 @@ Thumbs.db
 out
 
 .stryker-tmp
+.vercel
